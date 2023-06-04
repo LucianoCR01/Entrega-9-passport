@@ -1,0 +1,45 @@
+[
+  {
+    "idCarrito": "edafaf3b-d9aa-4894-9cfb-b3f2be6af377",
+    "productos": [
+      {
+        "id": "84d08f5e-0860-4374-b6cb-f747d334eeea",
+        "quantity": 2
+      },
+      {
+        "id": "c2b20208-b1a2-4084-874a-752ab3de6b26",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "idCarrito": "0c9f7cc0-2024-4309-9420-0175e6788d7a",
+    "productos": [
+      {
+        "id": "84d08f5e-0860-4374-b6cb-f747d334eeea",
+        "quantity": 4
+      },
+      {
+        "id": "c2b20208-b1a2-4084-874a-752ab3de6b26",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "idCarrito": "e51f67ef-1242-48c1-be0a-b633329067d1",
+    "productos": [
+      {
+        "id": "af08053f-d321-4101-8ed1-23a680e46966",
+        "quantity": 1
+      },
+      {
+        "id": "64a118c7-a675-46f4-a7c5-d0437627682f",
+        "quantity": 1
+      },
+      {
+        "id": "c2b20208-b1a2-4084-874a-752ab3de6b26",
+        "quantity": 1
+      }
+    ]
+  }
+]

@@ -1,0 +1,87 @@
+<div>
+    <h1>La lista de productos es: </h1>
+    <div id="div-id">
+        {{#each arrayProd}}
+        <ul>
+            <li>Nombre : {{this.title}}</li>
+            <li>Descripcion : {{this.description}}</li>
+            <li>Precio : {{this.price}}</li>
+            <li>Code : {{this.code}}</li>
+            <li>Stock : {{this.stock}}</li>
+            <li>Categoria : {{this.category}}</li>
+            <li>Imagen : <img src="{{this.picture}}" alt="{{title}}" width="50"></li>
+            <li>ID : {{this.id}}</li>
+        </ul>
+        {{/each}}
+    </div>
+</div>
+<form id="form-products" style="margin: auto">
+
+    <div>
+        <label for="title"> Titulo: </label>
+        <br />
+        <input type="text" name="title" id="form-title" style="margin-bottom: 16px" class="form-control"
+            placeholder="Agregar un titulo al producto" />
+    </div>
+
+    <div>
+        <label for="description"> Descripción: </label>
+        <br />
+        <input type="text" name="description" id="form-description" style="margin-bottom: 16px" class="form-control"
+            placeholder="Agregar un descripción al producto" />
+    </div>
+
+    <div>
+        <label for="price"> Precio: </label>
+        <br />
+        <input type="number" name="price" id="form-price" style="margin-bottom: 16px" step="1" class="form-control"
+            placeholder="Agregar un precio al producto" />
+    </div>
+
+    <div>
+        <label for="code"> Código: </label>
+        <br />
+        <input type="text" name="code" id="form-code" style="margin-bottom: 16px" class="form-control"
+            placeholder="Agregar un código al producto" />
+    </div>
+
+    <div>
+        <label for="stock"> Stock: </label>
+        <br />
+        <input type="number" name="stock" id="form-stock" style="margin-bottom: 16px" step="1" class="form-control"
+            placeholder="Agregar stock al producto" />
+    </div>
+
+    <div>
+        <label for="category"> Categoria: </label>
+        <br />
+        <input type="text" name="category" id="form-category" style="margin-bottom: 16px" class="form-control"
+            placeholder="Agregar una categoria al producto" />
+    </div>
+
+    <div>
+        <label for="thumbnail"> URL de la Imagen: </label>
+        <br />
+        <input type="text" name="thumbnail" id="form-thumbnail" style="margin-bottom: 16px" class="form-control"
+            placeholder="Agregar una URL valida" />
+    </div>
+
+    <div style="display: flex; justify-content: center; align-items: center">
+        <input type="submit" value="Crear producto" class="btn btn-primary" />
+    </div>
+</form>
+
+<form id="form-eliminar" style="margin: auto">
+    <div>
+        <label for="eliminar"> ID: </label>
+        <br />
+        <input type="text" name="eliminar" id="inputEliminar" style="margin-bottom: 16px" class="form-control"
+            placeholder="ID producto a eliminar" />
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center">
+        <input type="submit" value="Eliminar Producto" class="btn btn-primary" />
+    </div>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
