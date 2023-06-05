@@ -1,7 +1,7 @@
 //@ts-check
 import { Schema, model } from "mongoose";
 
-const schema = new Schema({
+const productSchema = new Schema({
     title: { type: String, required: true, max: 100 },
     description: { type: String, required: true, max: 100 },
     code: { type: Number, required: true, unique: true },
@@ -12,4 +12,4 @@ const schema = new Schema({
     picture: { type: String, required: true, max: 100 }
 });
 
-export const ProductsModel = model("productos", schema);
+export const ProductsModel = model("productos", productSchema);

@@ -15,7 +15,7 @@ class CartsService {
     }
 
     async findCart(idParam) {
-        const findCart = await CartsModel.find({ _id: idParam });
+        const findCart = await CartsModel.findOne({ _id: idParam }).populate('productos.product')
         return findCart
     }
 
