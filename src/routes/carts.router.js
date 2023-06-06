@@ -1,5 +1,4 @@
 import express from "express";
-import { carts } from "../clases/clases.carts.js";
 import { cartsService } from "../services/carts.service.js"
 
 
