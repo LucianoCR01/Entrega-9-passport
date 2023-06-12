@@ -6,12 +6,13 @@ export const productsRouter = express.Router()
 
 productsRouter.get("/", async (req, res) => {
     try {
-        const products = await productsService.getProducts()
-        return res.status(200).json({
-            status: "success",
-            msg: "listado de usuarios",
-            data: products,
-        });
+        const page = req.query.page ?? 1
+        const limit = req.query.limit ?? 10
+        const filtro = req.query.filtro
+        const sort = req.query.sort ?? 1
+
+        const products = await productsService.getProducts(limit, page, sort, filtro)
+        res.status(200).render("products", { products });
     } catch (e) {
         console.log(e);
         return res.status(500).json({

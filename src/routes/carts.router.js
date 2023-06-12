@@ -1,7 +1,6 @@
 import express from "express";
 import { cartsService } from "../services/carts.service.js"
 
-
 export const cartsRouter = express.Router()
 
 cartsRouter.post("/", async (req, res) => {
@@ -55,5 +54,24 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
             msg: "something went wrong :(",
             data: {},
         });
+    }
+})
+
+cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
+    const { cid, pid } = req.params;
+    try {
+        return res.status(200).json({
+            status: "success",
+            msg: "Producto Eliminado",
+            data: await cartsService.deleteProduct(cid, pid)
+        })
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "something went wrong :(",
+            data: {},
+        })
     }
 })

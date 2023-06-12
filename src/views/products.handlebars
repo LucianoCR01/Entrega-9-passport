@@ -1,0 +1,34 @@
+<div>
+    <h1>La lista de productos es: </h1>
+    <h3>page {{products.rest.page}}</h3>
+    {{#each products.productos}}
+    <ul>
+        <li>Nombre : {{this.title}}</li>
+        <li>Descripcion : {{this.description}}</li>
+        <li>Precio : {{this.price}}</li>
+        <li>Code : {{this.code}}</li>
+        <li>Stock : {{this.stock}}</li>
+        <li>Categoria : {{this.category}}</li>
+        <li>Imagen : {{this.picture}}</li>
+    </ul>
+    {{/each}}
+    {{#if products.rest.hasPrevPage}}
+    <a href="/products?page={{products.rest.prevPage}}">⬅️{{products.rest.prevPage}}</a>
+    {{/if}}
+
+    <a>{{products.rest.page}}</a>
+
+    {{#if products.rest.hasNextPage}}
+    <a href="/products?page={{products.rest.nextPage}}">➡️{{products.rest.nextPage}}</a>
+    {{/if}}
+    <br>
+    <br>
+    <p>totalDocs {{products.rest.totalDocs}}</p>
+    <p>limit {{products.rest.limit}}</p>
+    <p>totalPages {{products.rest.totalPages}}</p>
+    <p>pagingCounter {{products.rest.pagingCounter}}</p>
+    <p>hay pagina anterior? {{products.rest.hasPrevPage}}</p>
+    <p>hay pagina siguiente? {{products.rest.hasNextPage}}</p>
+    <p>pagina anterior {{products.rest.prevPage}}</p>
+    <p>pagina siguiente {{products.rest.nextPage}}</p>
+</div>

@@ -7,8 +7,6 @@ import { __dirname, connectMongo, connectSocket } from "./utils.js"
 import path from "path"
 import handlebars from "express-handlebars"
 
-
-
 const app = express()
 const PORT = 8080
 
@@ -36,7 +34,6 @@ app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
 app.use("/realtimeproducts", realTime)
 app.use("/", handlebarsRouter)
-
 
 app.get("*", (req, res) => {
     return res.status(404).json({
