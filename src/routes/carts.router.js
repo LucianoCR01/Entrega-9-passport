@@ -38,7 +38,7 @@ cartsRouter.get("/:cid", async (req, res) => {
     }
 })
 
-cartsRouter.post("/:cid/product/:pid", async (req, res) => {
+cartsRouter.post("/:cid/products/:pid", async (req, res) => {
     const idCart = req.params.cid
     const idProduct = req.params.pid
     try {
@@ -66,6 +66,65 @@ cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
             data: await cartsService.deleteProduct(cid, pid)
         })
 
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "something went wrong :(",
+            data: {},
+        })
+    }
+})
+
+cartsRouter.put("/:cid", async (req, res) => {
+    const { cid } = req.params
+    const data = req.body
+    try {
+        return res.status(200).json({
+            status: "success",
+            msg: "Carrito Actualizado",
+            data: await cartsService.updateCarrito(cid, data)
+        })
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "something went wrong :(",
+            data: {},
+        })
+    }
+})
+
+cartsRouter.put("/:cid/products/:pid", async (req, res) => {
+    const dataCantidad = req.body.data
+    const { cid } = req.params
+    const { pid } = req.params
+    try {
+        return res.status(200).json({
+            status: "success",
+            msg: "Cantidad Actualizada",
+            data: await cartsService.actualizarCantidad(cid, pid, dataCantidad)
+        })
+
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({
+            status: "error",
+            msg: "something went wrong :(",
+            data: {},
+        })
+    }
+})
+
+cartsRouter.delete("/:cid", async (req, res) => {
+    const { cid } = req.params
+    try {
+        return res.status(200).json({
+            status: "success",
+            msg: "Productos Borrados",
+            data: await cartsService.eliminarProdCarrito(cid)
+        })
     } catch (e) {
         console.log(e);
         return res.status(500).json({
