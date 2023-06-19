@@ -2,20 +2,15 @@
 import { Schema, model } from "mongoose";
 
 const cartSchema = new Schema({
-    productos: [{
+    productos: {
         type: [
             {
-                product: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'productos'
-                },
-                quantity: {
-                    type: Number
-                }
+                product: { type: Schema.Types.ObjectId, ref: "productos", required: true },
+                quantity: { type: Number, default: 1 },
             },
         ],
         default: [],
-    }]
+    },
 });
 cartSchema.pre('findOne', function () {
     this.populate('productos.product');

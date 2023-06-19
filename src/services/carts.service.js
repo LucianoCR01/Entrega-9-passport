@@ -1,12 +1,15 @@
 import { ProductsModel } from "../dao/models/products.model.js";
 import { CartsModel } from "../dao/models/carts.model.js";
-import Mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 
 class CartsService {
-    async getProducts() {
-        const products = await ProductsModel.find({});
-        return products
+    async getProducts(cid) {
+        const doc = await CartsModel.findById(cid).populate('products.product');
+        if (!doc) {
+            throw new Error('Cart not found');
+        }
+        return doc;
     }
 
     async createCart() {
@@ -20,38 +23,61 @@ class CartsService {
         return findCart
     }
 
-    ////////////NO FUNCIONA - A un carrito le agrega un producto o le suma 1 a quatity //////////
     async agregatedProduct(idCart, idProduct) {
-        let arrIni = { product: idProduct, quantity: 1 }
-        let doc = await CartsModel.updateOne({ _id: idCart }, { $push: { productos: [arrIni] } })
-        return doc
+        try {
+            const doc = await CartsModel.findById(idCart)
+            const product = await ProductsModel.findById(idProduct)
+            if (!doc) {
+                throw new Error('Carrito no encontrado');
+            }
+            if (!product) {
+                throw new Error('Producto no encontrado');
+            }
+            doc.productos.push({ product: product._id, quantity: 1 })
+            await doc.save()
+            return doc
+        } catch (error) {
+            throw error;
+        }
     }
 
     ////////////////////Borra un producto especifico de un carrito especifico - No funciona//////////
-
+    ///// Me encuantra a  product como NULL y nose porque//////
     async deleteProduct(cid, pid) {
-        const doc = await CartsModel.findOne({ _id: cid })
-        console.log(doc)
-
-    }
-
-
-    /////////A un carrito especifico se le inserta un array de productos nuevos-funciona pero a los objetos los mete dentro de un array///////
-    async updateCarrito(cid, data) {
-        let doc = await CartsModel.findOne({ _id: cid })
-        doc.productos = data
+        const objectId = new ObjectId(pid)
+        const doc = await CartsModel.findById(cid)
+        //const productIndex = doc.productos.findIndex((p) => p.product.toString() === pid)
+        const productIndex = doc.productos.findIndex((p) => p.product === objectId)
+        if (productIndex === -1) {
+            throw new Error("Producto no encontrado")
+        }
+        doc.productos.splice(productIndex, 1)
         await doc.save()
-    }
-
-    ///////////////No funciona - el objeto que se envia por body debe ser ej.{"data":10}/////////////////////////
-    async actualizarCantidad(cid, pid, dataCantidad) {
-        console.log(dataCantidad)
-        let arrDef = { product: pid, quantity: dataCantidad }
-        let doc = await CartsModel.updateOne({ _id: cid }, { $set: { productos: [arrDef] } })
         return doc
     }
 
-    //////////funciona - a un carrito en especifico le inserta un array vacio/////////
+    async updateCarrito(cid, productos) {
+        // let doc = await CartsModel.findOne({ _id: cid })
+        // doc.productos = productos
+        // await doc.save()
+        const doc = await CartsModel.findByIdAndUpdate(cid, { productos }, { new: true })
+        return doc
+    }
+
+    ///////////////No funciona - el objeto que se envia por body debe ser ej.{"data":10}/////////////////////////
+    ///// Me encuantra a  product como NULL y nose porque//////
+    async actualizarCantidad(cid, pid, dataCantidad) {
+        const objectId = new ObjectId(pid)
+        const doc = await CartsModel.findById(cid)
+        const productIndex = doc.productos.findIndex((p) => p.product === objectId)
+        if (productIndex === -1) {
+            throw new Error("Producto no encontrado")
+        }
+        doc.productos[productIndex].quantity = dataCantidad
+        await doc.save()
+        return doc
+    }
+
     async eliminarProdCarrito(cid) {
         let doc = await CartsModel.findOne({ _id: cid })
         doc.productos = []

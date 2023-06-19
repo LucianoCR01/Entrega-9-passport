@@ -78,12 +78,12 @@ cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
 
 cartsRouter.put("/:cid", async (req, res) => {
     const { cid } = req.params
-    const data = req.body
+    const productos = req.body
     try {
         return res.status(200).json({
             status: "success",
             msg: "Carrito Actualizado",
-            data: await cartsService.updateCarrito(cid, data)
+            data: await cartsService.updateCarrito(cid, productos)
         })
 
     } catch (e) {
