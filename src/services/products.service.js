@@ -25,6 +25,7 @@ class ProductsService {
         const { docs, ...rest } = products
         let productos = docs.map(docs => {
             return {
+                _id: docs._id,
                 title: docs.title,
                 description: docs.description,
                 code: docs.code,

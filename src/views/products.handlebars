@@ -10,6 +10,8 @@
         <li>Stock : {{this.stock}}</li>
         <li>Categoria : {{this.category}}</li>
         <li>Imagen : {{this.picture}}</li>
+        <a href="/products/{{this._id}}">View details of {{this._id}}</a>
+        <button onclick="putIntoCart('{{this._id}}')">Add to cart {{this._id}}</button>
     </ul>
     {{/each}}
     {{#if products.rest.hasPrevPage}}

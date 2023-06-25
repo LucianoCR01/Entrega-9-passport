@@ -39,3 +39,54 @@ formeliminar.onsubmit = (e) => {
     socket.emit("inputEliminar", inputEliminar.value);
     formeliminar.reset();
 };
+
+///----------FETCH CART----------
+
+let cartId = localStorage.getItem("cart-id");
+const API_URL = "http://localhost:8080";
+
+function putIntoCart(_id) {
+    cartId = localStorage.getItem("cart-id");
+    const url = API_URL + "/carts/" + cartId + "/product/" + _id;
+    const data = {};
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    };
+    fetch(url, options)
+        .then((response) => response.json())
+        .then((res) => {
+            console.log(res);
+            alert("added");
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert(JSON.stringify(error));
+        });
+}
+
+if (!cartId) {
+    alert("no id");
+    const url = API_URL + "/carts";
+    const data = { quantity: 1 };
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    };
+    fetch(url, options)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Response:", data);
+            const cartId = localStorage.setItem("cart-id", data._id);
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert(JSON.stringify(error));
+        });
+}
