@@ -2,10 +2,14 @@ import express from "express"
 import { productsRouter } from "./routes/products.router.js"
 import { cartsRouter } from "./routes/carts.router.js"
 import { handlebarsRouter } from "./routes/handlebars.router.js"
+import { authRouter } from "./routes/auth.router.js"
 import { realTime } from "./routes/realtime.router.js"
 import { __dirname, connectMongo, connectSocket } from "./utils.js"
 import path from "path"
 import handlebars from "express-handlebars"
+import MongoStore from 'connect-mongo';
+import session from "express-session"
+
 
 const app = express()
 const PORT = 8080
@@ -23,17 +27,28 @@ connectSocket(httpServer)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, "public")));
+app.use(
+    session({
+        store: MongoStore.create({ mongoUrl: "mongodb+srv://crucciluciano:crucciluciano@backendcoder.rhria47.mongodb.net/?retryWrites=true&w=majority", ttl: 3600 }),
+        secret: 'un-re-secreto',
+        resave: true,
+        saveUninitialized: true,
+    })
+);
 
 //handlebars
 app.engine("handlebars", handlebars.engine())
 app.set("view engine", "handlebars")
 app.set("views", path.join(__dirname, "views"));
 
+
+
 //Endponits
 app.use("/products", productsRouter)
 app.use("/carts", cartsRouter)
 app.use("/realtimeproducts", realTime)
 app.use("/", handlebarsRouter)
+app.use("/auth", authRouter)
 
 app.get("*", (req, res) => {
     return res.status(404).json({
