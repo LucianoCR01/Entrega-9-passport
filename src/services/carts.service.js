@@ -40,14 +40,10 @@ class CartsService {
             throw error;
         }
     }
-
-    ////////////////////Borra un producto especifico de un carrito especifico - No funciona//////////
-    ///// Me encuantra a  product como NULL y nose porque//////
+    ///////////////No funciona/////////////////////////
     async deleteProduct(cid, pid) {
-        const objectId = new ObjectId(pid)
         const doc = await CartsModel.findById(cid)
-        //const productIndex = doc.productos.findIndex((p) => p.product.toString() === pid)
-        const productIndex = doc.productos.findIndex((p) => p.product === objectId)
+        const productIndex = doc.productos.findIndex((p) => p.product._id.toString() == pid)
         if (productIndex === -1) {
             throw new Error("Producto no encontrado")
         }
@@ -57,9 +53,6 @@ class CartsService {
     }
 
     async updateCarrito(cid, productos) {
-        // let doc = await CartsModel.findOne({ _id: cid })
-        // doc.productos = productos
-        // await doc.save()
         const doc = await CartsModel.findByIdAndUpdate(cid, { productos }, { new: true })
         return doc
     }
@@ -67,10 +60,10 @@ class CartsService {
     ///////////////No funciona - el objeto que se envia por body debe ser ej.{"data":10}/////////////////////////
     ///// Me encuantra a  product como NULL y nose porque//////
     async actualizarCantidad(cid, pid, dataCantidad) {
-        const objectId = new ObjectId(pid)
         const doc = await CartsModel.findById(cid)
-        const productIndex = doc.productos.findIndex((p) => p.product === objectId)
-        if (productIndex === -1) {
+        const objectId = new ObjectId(pid)
+        const productIndex = doc.productos.findIndex((p) => p.product._id.toString() == pid)
+        if (productIndex == -1) {
             throw new Error("Producto no encontrado")
         }
         doc.productos[productIndex].quantity = dataCantidad
