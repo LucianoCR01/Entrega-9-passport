@@ -1,7 +1,5 @@
 import { ProductsModel } from "../dao/models/products.model.js";
 import { CartsModel } from "../dao/models/carts.model.js";
-import { ObjectId } from "mongodb";
-
 
 class CartsService {
     async getProducts(cid) {
@@ -40,7 +38,7 @@ class CartsService {
             throw error;
         }
     }
-    ///////////////No funciona/////////////////////////
+
     async deleteProduct(cid, pid) {
         const doc = await CartsModel.findById(cid)
         const productIndex = doc.productos.findIndex((p) => p.product._id.toString() == pid)
@@ -57,11 +55,8 @@ class CartsService {
         return doc
     }
 
-    ///////////////No funciona - el objeto que se envia por body debe ser ej.{"data":10}/////////////////////////
-    ///// Me encuantra a  product como NULL y nose porque//////
     async actualizarCantidad(cid, pid, dataCantidad) {
         const doc = await CartsModel.findById(cid)
-        const objectId = new ObjectId(pid)
         const productIndex = doc.productos.findIndex((p) => p.product._id.toString() == pid)
         if (productIndex == -1) {
             throw new Error("Producto no encontrado")

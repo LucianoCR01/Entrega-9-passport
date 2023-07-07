@@ -1,6 +1,8 @@
 import express from "express";
 import { UserModel } from "../dao/models/users.model.js";
 import { isUser, isAdmin } from "../middlewares/auth.js";
+//import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 export const authRouter = express.Router()
 
 authRouter.get('/profile', isUser, (req, res) => {
@@ -19,10 +21,6 @@ authRouter.get('/logout', (req, res) => {
 
 authRouter.get('/administration', isUser, isAdmin, (req, res) => {
     return res.send('Data');
-});
-
-authRouter.get('/login', (req, res) => {
-    return res.render("login", {});
 });
 
 authRouter.get('/products', (req, res) => {
@@ -45,7 +43,23 @@ authRouter.get('/products', (req, res) => {
     }
 });
 
-authRouter.post('/login', async (req, res) => {
+authRouter.get('/login', (req, res) => {
+    return res.render("login", {});
+});
+
+authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/auth/faillogin' }), async (req, res) => {
+    if (!req.user) {
+        return res.json({ error: 'invalid credentials' });
+    }
+    req.session.user = { _id: req.user._id, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, isAdmin: req.user.isAdmin };
+
+    return res.json({ msg: 'ok', payload: req.user });
+});
+
+authRouter.get('/faillogin', async (req, res) => {
+    return res.json({ error: 'fail to login' });
+});
+/* authRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -58,7 +72,7 @@ authRouter.post('/login', async (req, res) => {
             return res.redirect('/auth/products');
         }
         const foundUser = await UserModel.findOne({ email: email });
-        if (foundUser && foundUser.password === password) {
+        if (foundUser && isValidPassword(password, foundUser.password)) {
             req.session.email = foundUser.email;
             req.session.isAdmin = foundUser.isAdmin;
             return req.session.save(() => {
@@ -71,20 +85,32 @@ authRouter.post('/login', async (req, res) => {
         console.error(error);
         res.status(500).json({ status: 'error', message: 'Internal server error' });
     }
-});
+}); */
 
 authRouter.get('/register', (req, res) => {
     return res.render("register", {});
 });
 
-authRouter.post('/register', async (req, res) => {
+authRouter.post('/register', passport.authenticate('register', { failureRedirect: '/auth/failregister' }), (req, res) => {
+    if (!req.user) {
+        return res.json({ error: 'something went wrong' });
+    }
+    req.session.user = { _id: req.user._id, email: req.user.email, firstName: req.user.firstName, lastName: req.user.lastName, isAdmin: req.user.isAdmin };
+
+    return res.json({ msg: 'ok', payload: req.user });
+});
+
+authRouter.get('/failregister', async (req, res) => {
+    return res.json({ error: 'fail to register' });
+});
+/* authRouter.post('/register', async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
     if (!email || !password || !firstName || !lastName) {
         return res.status(400).render('error', { error: 'Missing fields' });
     }
     const isAdmin = email === 'adminCoder@coder.com' && password === 'adminCod3r123';
     try {
-        await UserModel.create({ email: email, password: password, firstName: firstName, lastName: lastName, isAdmin: isAdmin });
+        await UserModel.create({ email: email, password: createHash(password), firstName: firstName, lastName: lastName, isAdmin: isAdmin });
         req.session.email = email;
         req.session.isAdmin = isAdmin;
 
@@ -94,3 +120,4 @@ authRouter.post('/register', async (req, res) => {
         return res.status(400).render('error', { error: 'User could not be created. Try another email' });
     }
 });
+ */

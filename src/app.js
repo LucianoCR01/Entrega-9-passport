@@ -9,6 +9,8 @@ import path from "path"
 import handlebars from "express-handlebars"
 import MongoStore from 'connect-mongo';
 import session from "express-session"
+import { iniPassport } from "./config/passport.config.js"
+import passport from "passport"
 
 
 const app = express()
@@ -36,12 +38,14 @@ app.use(
     })
 );
 
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session())
+
 //handlebars
 app.engine("handlebars", handlebars.engine())
 app.set("view engine", "handlebars")
 app.set("views", path.join(__dirname, "views"));
-
-
 
 //Endponits
 app.use("/products", productsRouter)
