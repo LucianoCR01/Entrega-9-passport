@@ -3,10 +3,10 @@ import local from 'passport-local';
 import { createHash, isValidPassword } from '../utils.js';
 import { UserModel } from '../dao/models/users.model.js';
 const LocalStrategy = local.Strategy
-//import GitHubStrategy = require('passport-github2');
+import GitHubStrategy from 'passport-github2'
 //require('dotenv').config();
 //import clientID = process.env.CLIENT_ID
-//import clientSecret = process.env.CLIENT_SECRET
+//import clientSecret from process.env.CLIENT_SECRET
 
 export function iniPassport() {
     passport.use(
@@ -66,13 +66,13 @@ export function iniPassport() {
         )
     );
 
-    /* passport.use(
+    passport.use(
         'github',
         new GitHubStrategy(
             {
-                clientID: clientID,
-                clientSecret: clientSecret,
-                callbackURL: 'http://localhost:8080/api/sessions/githubcallback',
+                clientID: "Iv1.12545c1ade57ec58",
+                clientSecret: "3e55360554c1b223725e76f88151e9b5c6aef93d",
+                callbackURL: "http://localhost:8080/",
             },
             async (accessToken, _, profile, done) => {
                 console.log(profile);
@@ -99,7 +99,7 @@ export function iniPassport() {
                             firstName: profile._json.name || profile._json.login || 'noname',
                             lastName: 'nolast',
                             isAdmin: false,
-                            password: profile.password || '',
+                            password: 'nopass',
                         };
                         let userCreated = await UserModel.create(newUser);
                         console.log('User Registration succesful');
@@ -116,7 +116,7 @@ export function iniPassport() {
             }
         )
     );
- */
+
     passport.serializeUser((user, done) => {
         done(null, user._id);
     });

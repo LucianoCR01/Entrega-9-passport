@@ -1,7 +1,6 @@
 import express from "express";
 import { UserModel } from "../dao/models/users.model.js";
 import { isUser, isAdmin } from "../middlewares/auth.js";
-//import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 export const authRouter = express.Router()
 
@@ -59,33 +58,7 @@ authRouter.post('/login', passport.authenticate('login', { failureRedirect: '/au
 authRouter.get('/faillogin', async (req, res) => {
     return res.json({ error: 'fail to login' });
 });
-/* authRouter.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).render('error', { error: 'email and password required' });
-        }
-        const isAdmin = email === 'adminCoder@coder.com' && password === 'adminCod3r123';
-        if (isAdmin) {
-            req.session.email = email;
-            req.session.isAdmin = true;
-            return res.redirect('/auth/products');
-        }
-        const foundUser = await UserModel.findOne({ email: email });
-        if (foundUser && isValidPassword(password, foundUser.password)) {
-            req.session.email = foundUser.email;
-            req.session.isAdmin = foundUser.isAdmin;
-            return req.session.save(() => {
-                return res.redirect('/auth/products');
-            });
-        } else {
-            return res.status(401).render('error', { error: 'wrong email or password' })
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: 'error', message: 'Internal server error' });
-    }
-}); */
+
 
 authRouter.get('/register', (req, res) => {
     return res.render("register", {});
@@ -103,21 +76,3 @@ authRouter.post('/register', passport.authenticate('register', { failureRedirect
 authRouter.get('/failregister', async (req, res) => {
     return res.json({ error: 'fail to register' });
 });
-/* authRouter.post('/register', async (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
-    if (!email || !password || !firstName || !lastName) {
-        return res.status(400).render('error', { error: 'Missing fields' });
-    }
-    const isAdmin = email === 'adminCoder@coder.com' && password === 'adminCod3r123';
-    try {
-        await UserModel.create({ email: email, password: createHash(password), firstName: firstName, lastName: lastName, isAdmin: isAdmin });
-        req.session.email = email;
-        req.session.isAdmin = isAdmin;
-
-        return res.redirect('/auth/profile');
-    } catch (e) {
-        console.log(e);
-        return res.status(400).render('error', { error: 'User could not be created. Try another email' });
-    }
-});
- */

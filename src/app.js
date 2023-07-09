@@ -1,16 +1,17 @@
+import MongoStore from 'connect-mongo'
 import express from "express"
-import { productsRouter } from "./routes/products.router.js"
+import handlebars from "express-handlebars"
+import session from "express-session"
+import passport from "passport"
+import path from "path"
+import { iniPassport } from "./config/passport.config.js"
+import { authRouter } from "./routes/auth.router.js"
 import { cartsRouter } from "./routes/carts.router.js"
 import { handlebarsRouter } from "./routes/handlebars.router.js"
-import { authRouter } from "./routes/auth.router.js"
+import { productsRouter } from "./routes/products.router.js"
 import { realTime } from "./routes/realtime.router.js"
+import { sessionsRouter } from './routes/sessions.router.js'
 import { __dirname, connectMongo, connectSocket } from "./utils.js"
-import path from "path"
-import handlebars from "express-handlebars"
-import MongoStore from 'connect-mongo';
-import session from "express-session"
-import { iniPassport } from "./config/passport.config.js"
-import passport from "passport"
 
 
 const app = express()
@@ -53,6 +54,8 @@ app.use("/carts", cartsRouter)
 app.use("/realtimeproducts", realTime)
 app.use("/", handlebarsRouter)
 app.use("/auth", authRouter)
+app.use('/api/sessions', sessionsRouter);
+
 
 app.get("*", (req, res) => {
     return res.status(404).json({
