@@ -4,6 +4,7 @@ import { createHash, isValidPassword } from '../utils.js';
 import { UserModel } from '../dao/models/users.model.js';
 const LocalStrategy = local.Strategy
 import GitHubStrategy from 'passport-github2'
+import fetch from 'node-fetch';
 //require('dotenv').config();
 //import clientID = process.env.CLIENT_ID
 //import clientSecret from process.env.CLIENT_SECRET
@@ -72,7 +73,7 @@ export function iniPassport() {
             {
                 clientID: "Iv1.12545c1ade57ec58",
                 clientSecret: "3e55360554c1b223725e76f88151e9b5c6aef93d",
-                callbackURL: "http://localhost:8080/",
+                callbackURL: "http://localhost:8080/api/sessions/githubcallback",
             },
             async (accessToken, _, profile, done) => {
                 console.log(profile);
